@@ -47,8 +47,8 @@ void report_text(FILE *out, const struct scan_report *r)
 	for (size_t i = 0; i < r->findings->len; i++) {
 		const struct finding *f = &r->findings->items[i];
 
-		fprintf(out, "  %-8s %s (%s): %s\n", severity_name(f->severity), f->id,
-			f->detector, f->message);
+		fprintf(out, "  %-8s %s (%s): %s\n", severity_name(f->severity), f->id, f->detector,
+			f->message);
 		for (size_t j = 0; j < f->n_evidence; j++)
 			fprintf(out, "           %s\n", f->evidence[j]);
 	}

@@ -73,8 +73,8 @@ static int cmd_scan(int argc, char **argv)
 	const struct detector *selected[64];
 	size_t n_selected = 0;
 	int json = 0;
-	struct scan_ctx ctx = { &source_proc, &source_sysfs, &source_kmod };
-	struct finding_list findings = { 0 };
+	struct scan_ctx ctx = {&source_proc, &source_sysfs, &source_kmod};
+	struct finding_list findings = {0};
 	struct detector_result results[64];
 	struct scan_report report;
 	int kmod_ok = source_kmod.probe(&source_kmod) == 0;

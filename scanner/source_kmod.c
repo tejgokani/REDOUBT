@@ -40,6 +40,6 @@ static int kmod_probe(const struct source *self)
 
 /* Session 2 adds list_modules / tasks / syscall-table ops backed by ioctls. */
 const struct source source_kmod = {
-	.name = "kmod",
-	.probe = kmod_probe,
+    .name = "kmod",
+    .probe = kmod_probe,
 };

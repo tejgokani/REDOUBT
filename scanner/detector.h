@@ -16,14 +16,14 @@ struct scan_ctx {
 enum detect_status {
 	DETECT_OK = 0,
 	DETECT_NOT_IMPLEMENTED = 1, /* registered but no logic yet */
-	DETECT_UNAVAILABLE = 2,     /* required source missing (e.g. no kmod) */
+	DETECT_UNAVAILABLE = 2,	    /* required source missing (e.g. no kmod) */
 	DETECT_ERROR = 3,
 };
 
 struct detector {
-	const char *name;        /* CLI id: --check <name> */
+	const char *name; /* CLI id: --check <name> */
 	const char *description;
-	int needs_kmod;          /* 1 if it cannot run without /dev/redoubt */
+	int needs_kmod; /* 1 if it cannot run without /dev/redoubt */
 	enum detect_status (*run)(const struct scan_ctx *ctx, struct finding_list *out);
 };
 

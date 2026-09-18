@@ -15,6 +15,6 @@ static int sysfs_probe(const struct source *self)
 }
 
 const struct source source_sysfs = {
-	.name = "sysfs",
-	.probe = sysfs_probe,
+    .name = "sysfs",
+    .probe = sysfs_probe,
 };

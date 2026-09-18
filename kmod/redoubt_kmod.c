@@ -24,10 +24,10 @@ static long rdt_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	switch (cmd) {
 	case RDT_GET_VERSION: {
 		struct rdt_version v = {
-			.abi_major = RDT_ABI_MAJOR,
-			.abi_minor = RDT_ABI_MINOR,
-			.kernel_version_code = LINUX_VERSION_CODE,
-			.flags = 0,
+		    .abi_major = RDT_ABI_MAJOR,
+		    .abi_minor = RDT_ABI_MINOR,
+		    .kernel_version_code = LINUX_VERSION_CODE,
+		    .flags = 0,
 		};
 
 		if (copy_to_user((void __user *)arg, &v, sizeof(v)))
@@ -40,17 +40,17 @@ static long rdt_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 }
 
 static const struct file_operations rdt_fops = {
-	.owner = THIS_MODULE,
-	.unlocked_ioctl = rdt_ioctl,
-	.compat_ioctl = rdt_ioctl,
-	.llseek = noop_llseek,
+    .owner = THIS_MODULE,
+    .unlocked_ioctl = rdt_ioctl,
+    .compat_ioctl = rdt_ioctl,
+    .llseek = noop_llseek,
 };
 
 static struct miscdevice rdt_dev = {
-	.minor = MISC_DYNAMIC_MINOR,
-	.name = RDT_DEVICE_NAME,
-	.fops = &rdt_fops,
-	.mode = 0600,
+    .minor = MISC_DYNAMIC_MINOR,
+    .name = RDT_DEVICE_NAME,
+    .fops = &rdt_fops,
+    .mode = 0600,
 };
 
 static int __init rdt_init(void)

@@ -16,13 +16,13 @@ static enum detect_status stub_run(const struct scan_ctx *ctx, struct finding_li
 }
 
 static const struct detector registry[] = {
-	{ "hidden-module", "Loaded modules present in one kernel view but not another", 1, stub_run },
-	{ "syscall-table", "System call entries pointing outside kernel text", 1, stub_run },
-	{ "hidden-process", "Tasks visible to the kernel but absent from /proc", 1, stub_run },
-	{ "taint", "Kernel taint flags indicating unsigned/out-of-tree modules", 0, stub_run },
-	{ "ftrace-hooks", "ftrace/kprobe hooks not owned by known tooling", 1, stub_run },
-	{ "hidden-file", "Directory entries hidden from getdents but reachable by name", 0, stub_run },
-	{ "net-hooks", "Suspicious netfilter hooks and kallsyms inconsistencies", 1, stub_run },
+    {"hidden-module", "Loaded modules present in one kernel view but not another", 1, stub_run},
+    {"syscall-table", "System call entries pointing outside kernel text", 1, stub_run},
+    {"hidden-process", "Tasks visible to the kernel but absent from /proc", 1, stub_run},
+    {"taint", "Kernel taint flags indicating unsigned/out-of-tree modules", 0, stub_run},
+    {"ftrace-hooks", "ftrace/kprobe hooks not owned by known tooling", 1, stub_run},
+    {"hidden-file", "Directory entries hidden from getdents but reachable by name", 0, stub_run},
+    {"net-hooks", "Suspicious netfilter hooks and kallsyms inconsistencies", 1, stub_run},
 };
 
 size_t detector_count(void)

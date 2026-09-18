@@ -17,9 +17,9 @@ const char *severity_name(enum severity s);
 #define FINDING_MAX_EVIDENCE 8
 
 struct finding {
-	char *id;       /* stable machine id, e.g. "hidden-module.sysfs-only" */
+	char *id;	/* stable machine id, e.g. "hidden-module.sysfs-only" */
 	char *detector; /* detector name that produced it */
-	char *message;  /* one-line human description */
+	char *message;	/* one-line human description */
 	enum severity severity;
 	char *evidence[FINDING_MAX_EVIDENCE]; /* "key=value" strings */
 	size_t n_evidence;

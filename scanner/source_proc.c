@@ -70,7 +70,7 @@ static int proc_list_modules(const struct source *self, struct str_list *out)
 #endif
 
 const struct source source_proc = {
-	.name = "proc",
-	.probe = proc_probe,
-	.list_modules = proc_list_modules,
+    .name = "proc",
+    .probe = proc_probe,
+    .list_modules = proc_list_modules,
 };

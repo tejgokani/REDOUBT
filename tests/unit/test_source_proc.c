@@ -8,7 +8,7 @@ void test_source_proc(void)
 				   "evil_mod 16384 0 - Live 0x0000000000000000 (OE)\n"
 				   "\n"
 				   "last 4096 0 - Live 0x0";
-	struct str_list l = { 0 };
+	struct str_list l = {0};
 
 	CHECK(proc_parse_modules(text, &l) == 0);
 	CHECK(l.len == 3);

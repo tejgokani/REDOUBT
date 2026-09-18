@@ -4,7 +4,7 @@
 
 void test_finding(void)
 {
-	struct finding_list l = { 0 };
+	struct finding_list l = {0};
 
 	CHECK(finding_list_max_severity(&l) == SEV_INFO);
 	int a = finding_list_add(&l, "hidden-module", "hidden-module.x", SEV_HIGH, "msg");

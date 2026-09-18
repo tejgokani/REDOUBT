@@ -7,13 +7,13 @@
 
 extern int t_checks, t_failed;
 
-#define CHECK(cond)                                                              \
-	do {                                                                     \
-		t_checks++;                                                      \
-		if (!(cond)) {                                                   \
-			t_failed++;                                              \
-			fprintf(stderr, "FAIL %s:%d: %s\n", __FILE__, __LINE__, #cond); \
-		}                                                                \
+#define CHECK(cond)                                                                                \
+	do {                                                                                       \
+		t_checks++;                                                                        \
+		if (!(cond)) {                                                                     \
+			t_failed++;                                                                \
+			fprintf(stderr, "FAIL %s:%d: %s\n", __FILE__, __LINE__, #cond);            \
+		}                                                                                  \
 	} while (0)
 
 #define CHECK_STR(a, b) CHECK(strcmp((a), (b)) == 0)

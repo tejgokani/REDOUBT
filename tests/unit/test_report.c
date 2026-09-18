@@ -23,13 +23,14 @@ static char *capture(void (*fn)(FILE *, const struct scan_report *), const struc
 
 void test_report(void)
 {
-	struct finding_list l = { 0 };
-	struct detector_result res[] = { { "taint", DETECT_OK } };
-	struct scan_report r = { res, 1, &l };
+	struct finding_list l = {0};
+	struct detector_result res[] = {{"taint", DETECT_OK}};
+	struct scan_report r = {res, 1, &l};
 	char *out;
 
 	out = capture(report_json, &r);
-	CHECK_STR(out, "{\"schema\":1,\"detectors\":[{\"name\":\"taint\",\"status\":\"ok\"}],\"findings\":[]}\n");
+	CHECK_STR(out, "{\"schema\":1,\"detectors\":[{\"name\":\"taint\",\"status\":\"ok\"}],"
+		       "\"findings\":[]}\n");
 	free(out);
 
 	finding_list_add(&l, "taint", "taint.unsigned", SEV_MEDIUM, "say \"hi\"\n");

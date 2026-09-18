@@ -4,7 +4,7 @@
 
 void test_util(void)
 {
-	struct str_list l = { 0 };
+	struct str_list l = {0};
 
 	CHECK(str_list_push(&l, "a") == 0);
 	for (int i = 0; i < 20; i++) /* forces growth past initial capacity */
