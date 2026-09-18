@@ -1,0 +1,109 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint (format, shell)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y clang-format shellcheck
+      - name: clang-format
+        run: |
+          if ! make format-check; then
+            make format
+            git diff > format.patch
+            echo "::error::Formatting differs. Run 'make format' (patch attached as artifact)."
+            exit 1
+          fi
+      - name: shellcheck
+        run: shellcheck tools/*.sh
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: failure()
+        with:
+          name: format-patch
+          path: format.patch
+          if-no-files-found: ignore
+
+  build-test:
+    name: build+test (${{ matrix.os }}, ${{ matrix.cc }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-24.04, cc: gcc }
+          - { os: ubuntu-24.04, cc: clang }
+          - { os: ubuntu-24.04-arm, cc: gcc }
+          - { os: macos-latest, cc: clang }
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Build and unit test
+        run: make scanner test CC=${{ matrix.cc }}
+      - name: CLI smoke test
+        run: |
+          build/redoubt version
+          build/redoubt list-checks
+          build/redoubt doctor
+          build/redoubt scan --json | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["schema"]==1'
+
+  sanitizers:
+    name: asan+ubsan
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - run: make test SANITIZE=1 CC=clang
+
+  static-analysis:
+    name: cppcheck + gcc -fanalyzer
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - run: sudo apt-get update && sudo apt-get install -y cppcheck
+      - name: cppcheck
+        run: cppcheck --error-exitcode=1 --enable=warning,performance,portability --inline-suppr --suppress=missingIncludeSystem -Iinclude scanner tests
+      - name: gcc analyzer
+        run: make scanner CC="gcc -fanalyzer"
+
+  kmod-build:
+    name: kmod build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - run: sudo apt-get update && sudo apt-get install -y linux-headers-$(uname -r)
+      - name: Build module (W=1)
+        run: make -C /lib/modules/$(uname -r)/build M=$PWD/kmod W=1 modules
+      - name: modinfo
+        run: modinfo kmod/redoubt_kmod.ko
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: redoubt_kmod-${{ matrix.os }}
+          path: kmod/redoubt_kmod.ko
+
+  # Single required status check for branch protection.
+  ci-ok:
+    name: ci-ok
+    if: always()
+    needs: [lint, build-test, sanitizers, static-analysis, kmod-build]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Verify all jobs succeeded
+        run: |
+          echo '${{ toJSON(needs) }}' | python3 -c 'import json,sys; d=json.load(sys.stdin); bad=[k for k,v in d.items() if v["result"]!="success"]; print("failed:",bad); sys.exit(1 if bad else 0)'

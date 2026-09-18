@@ -1,0 +1,15 @@
+name: Bug report
+description: Something in Redoubt is broken (crash, false positive, build failure)
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes: { label: What happened?, description: Include expected vs actual behaviour }
+    validations: { required: true }
+  - type: input
+    id: kernel
+    attributes: { label: "Kernel (uname -r) and arch" }
+    validations: { required: true }
+  - type: textarea
+    id: output
+    attributes: { label: "`redoubt doctor` and `redoubt scan --json` output; relevant dmesg" , render: shell }

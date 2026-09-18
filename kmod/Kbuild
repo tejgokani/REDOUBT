@@ -1,0 +1,2 @@
+obj-m := redoubt_kmod.o
+ccflags-y := -I$(src)/../include -Wall -Wextra
