@@ -31,7 +31,7 @@ jobs:
           fi
       - name: shellcheck
         run: shellcheck tools/*.sh
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: failure()
         with:
           name: format-patch
@@ -92,7 +92,7 @@ jobs:
         run: make -C /lib/modules/$(uname -r)/build M=$PWD/kmod W=1 modules
       - name: modinfo
         run: modinfo kmod/redoubt_kmod.ko
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: redoubt_kmod-${{ matrix.os }}
           path: kmod/redoubt_kmod.ko
