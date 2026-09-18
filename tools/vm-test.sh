@@ -4,6 +4,7 @@
 set -euo pipefail
 VM=redoubt
 "$(dirname "$0")/vm-sync-build.sh"
+# shellcheck disable=SC2016  # expansion intentionally happens inside the VM
 limactl shell "$VM" -- sudo bash -euc '
 	cd "$HOME/redoubt-build" 2>/dev/null || cd /home/*/redoubt-build
 	insmod kmod/redoubt_kmod.ko

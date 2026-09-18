@@ -3,6 +3,7 @@
 # Build in a VM-local copy so host build artifacts (macOS objects) never mix in.
 set -euo pipefail
 VM=redoubt
+# shellcheck disable=SC2016  # expansion intentionally happens inside the VM
 limactl shell "$VM" -- bash -euc '
 	rsync -a --delete --exclude build --exclude .git /redoubt/ "$HOME/redoubt-build/"
 	cd "$HOME/redoubt-build"
